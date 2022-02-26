@@ -1,62 +1,89 @@
 import axios from "axios";
-import './App.css';
+import "./App.css";
 import { Container, Switch, withStyles } from "@material-ui/core";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header/Header";
 import Definitions from "./components/Definitions/Definitions";
 import { grey } from "@material-ui/core/colors";
 
-
-
 function App() {
- const [word, setWord] = useState('');
+ const [word, setWord] = useState("");
  const [meanings, setMeanings] = useState([]);
- const [category, setCategory] = useState('en');
+ const [category, setCategory] = useState("en");
  const [lightMode, setLightMode] = useState(false);
- const dictionaryApi = async()=>{
+ const dictionaryApi = async () => {
   try {
-   const data = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/${category}/${word}`);
+   const data = await axios.get(
+    `https://api.dictionaryapi.dev/api/v2/entries/${category}/${word}`
+   );
    setMeanings(data.data);
   } catch (error) {
    console.log(error);
   }
- }
+ };
 
- useEffect(()=>{
+ useEffect(() => {
   dictionaryApi();
  }, [word, category]);
 
  const DarkMode = withStyles({
   switchBase: {
-    color: grey[300],
-    '&$checked': {
-      color: grey[500],
-    },
-    '&$checked + $track': {
-      backgroundColor: grey[500],
-    },
+   color: grey[300],
+   "&$checked": {
+    color: grey[500],
+   },
+   "&$checked + $track": {
+    backgroundColor: grey[500],
+   },
   },
   checked: {},
   track: {},
-})(Switch);
+ })(Switch);
 
-
- 
- 
- 
  return (
-  <div className="App"  
-  style={{height: "100vh", backgroundColor: lightMode ? "#fff" : "#282c34", color: lightMode ? "black" : "white", transition: "all 0.5s linear"}}
+  <div
+   className="App"
+   style={{
+    height: "100vh",
+    backgroundColor: lightMode ? "#fff" : "#282c34",
+    color: lightMode ? "black" : "white",
+    transition: "all 0.5s linear",
+   }}
   >
-   <Container maxWidth="md" style={{display: "flex", flexDirection: "column", height: "100vh", justifyContent: "space-evenly"}}>
-    <div style={{position: "absolute", top: "0", right: "15px", marginBottom: 10, paddingTop: "10px"}}>
+   <Container
+    maxWidth="md"
+    style={{
+     display: "flex",
+     flexDirection: "column",
+     height: "100vh",
+     justifyContent: "space-evenly",
+    }}
+   >
+    <div
+     style={{
+      position: "absolute",
+      top: "0",
+      right: "15px",
+      marginBottom: 10,
+      paddingTop: "10px",
+     }}
+    >
      <span>{lightMode ? "Dark" : "Light"} Mode</span>
-     <DarkMode checked={lightMode} onChange={()=> setLightMode(!lightMode)}/>
+     <DarkMode checked={lightMode} onChange={() => setLightMode(!lightMode)} />
     </div>
-    <Header category={category} setCategory={setCategory} word={word} setWord={setWord} lightMode={lightMode}/>
-    <Definitions word={word} meanings={meanings} category={category} lightMode={lightMode}/>
-    
- 
+    <Header
+     category={category}
+     setCategory={setCategory}
+     word={word}
+     setWord={setWord}
+     lightMode={lightMode}
+    />
+    <Definitions
+     word={word}
+     meanings={meanings}
+     category={category}
+     lightMode={lightMode}
+    />
    </Container>
   </div>
  );
